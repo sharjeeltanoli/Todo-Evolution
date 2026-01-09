@@ -4,6 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.13%2B-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-15%2B-black)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109%2B-009688)
+[![Vercel](https://img.shields.io/badge/Vercel-Live%20Demo-000000?logo=vercel)](https://todo-web-app-ochre.vercel.app/)
 
 <!-- Placeholder for Project Logo -->
 <div align="center">
@@ -34,6 +35,7 @@ A secure, multi-user task management application built with a modern full-stack 
 - **✅ Task Management**: Complete CRUD (Create, Read, Update, Delete) operations for personal tasks.
 - **📱 Responsive Design**: A modern, mobile-friendly interface built with Next.js and Tailwind CSS.
 - **🔌 RESTful API**: A stateless backend API built with FastAPI and SQLModel.
+- **🚀 Live Demo**: [todo-web-app-ochre.vercel.app](https://todo-web-app-ochre.vercel.app/)
 
 <!-- Placeholder for Screenshots -->
 ### Screenshots
