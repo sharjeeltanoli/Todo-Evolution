@@ -107,6 +107,7 @@ Before you begin, ensure you have the following installed:
     ```
     The application will be accessible at `http://localhost:3000`.
 
+<<<<<<< HEAD
 ## ☁️ Vercel Deployment & Auth Setup
 
 To deploy this project on Vercel and ensure authentication works with Neon DB, follow these steps:
@@ -132,6 +133,8 @@ To deploy this project on Vercel and ensure authentication works with Neon DB, f
     -   Vercel will automatically detect the Next.js frontend.
     -   Ensure your backend (FastAPI) is also deployed (e.g., as Vercel Serverless Functions in `api/` or on a separate service like Render/Railway) and reachable via `NEXT_PUBLIC_BACKEND_URL`.
 
+=======
+>>>>>>> 15ed588639b83ed766b17f548e0317ffeb3850e0
 ## 🎮 Usage
 
 1.  Ensure both the backend (`http://localhost:8000`) and frontend (`http://localhost:3000`) servers are running.
@@ -145,6 +148,7 @@ Create `.env` files in the respective directories with the following keys:
 
 **Backend (`backend/.env`)**
 ```ini
+<<<<<<< HEAD
 # Database Connection (Neon) - Must include sslmode=require
 DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
 
@@ -153,12 +157,22 @@ BETTER_AUTH_SECRET=your_super_secret_key
 
 # CORS - Comma-separated list of allowed origins
 ALLOWED_ORIGINS=http://localhost:3000,https://todo-web-app-ochre.vercel.app
+=======
+DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
+BETTER_AUTH_SECRET=your_super_secret_key
+ALLOWED_ORIGINS=http://localhost:3000
+>>>>>>> 15ed588639b83ed766b17f548e0317ffeb3850e0
 ```
 
 **Frontend (`frontend/.env.local`)**
 ```ini
+<<<<<<< HEAD
 # Backend API URL
 NEXT_PUBLIC_API_URL=http://localhost:8000
+=======
+NEXT_PUBLIC_API_URL=http://localhost:8000
+BETTER_AUTH_SECRET=your_super_secret_key
+>>>>>>> 15ed588639b83ed766b17f548e0317ffeb3850e0
 ```
 
 ## 🤝 Contributing

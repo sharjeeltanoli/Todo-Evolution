@@ -11,6 +11,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+<<<<<<< HEAD
     try:
         return pwd_context.verify(plain_password, hashed_password)
     except ValueError:
@@ -21,6 +22,11 @@ def get_password_hash(password: str) -> str:
     if len(password.encode('utf-8')) > 72:
         # Fail gracefully if password is too long for bcrypt
         raise ValueError("Password is too long (max 72 bytes)")
+=======
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+>>>>>>> 15ed588639b83ed766b17f548e0317ffeb3850e0
     return pwd_context.hash(password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
