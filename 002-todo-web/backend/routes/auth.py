@@ -35,7 +35,13 @@ def signup(user_data: UserRegister, session: Session = Depends(get_session)):
         )
     
     # Create new user
-    hashed_password = get_password_hash(user_data.password)
+    try:
+        hashed_password = get_password_hash(user_data.password)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
     new_user = User(
         email=user_data.email, 
         name=user_data.name, 

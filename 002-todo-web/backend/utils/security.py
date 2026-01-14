@@ -1,33 +1,30 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from passlib.context import CryptContext
+import bcrypt
 import jwt
 import os
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 BETTER_AUTH_SECRET = os.getenv("BETTER_AUTH_SECRET")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-<<<<<<< HEAD
     try:
-        return pwd_context.verify(plain_password, hashed_password)
-    except ValueError:
-        # Likely password too long for bcrypt
+        return bcrypt.checkpw(
+            plain_password.encode('utf-8'), 
+            hashed_password.encode('utf-8')
+        )
+    except (ValueError, TypeError):
         return False
 
 def get_password_hash(password: str) -> str:
-    if len(password.encode('utf-8')) > 72:
-        # Fail gracefully if password is too long for bcrypt
-        raise ValueError("Password is too long (max 72 bytes)")
-=======
-    return pwd_context.verify(plain_password, hashed_password)
-
-def get_password_hash(password: str) -> str:
->>>>>>> 15ed588639b83ed766b17f548e0317ffeb3850e0
-    return pwd_context.hash(password)
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) > 72:
+        # Truncate to 72 bytes as per bcrypt requirements
+        password_bytes = password_bytes[:72]
+    
+    hashed = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    return hashed.decode('utf-8')
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()

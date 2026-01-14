@@ -16,6 +16,8 @@ export default function TasksPage() {
   const [error, setError] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null); // State for task being edited
+  const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
   const userId = getCurrentUserId(); // Get user ID from JWT
   const user = getCurrentUser(); // Get full user object
@@ -83,6 +85,22 @@ export default function TasksPage() {
     fetchTasks();
   };
 
+  const filteredTasks = tasks.filter(task => {
+    // Filter by status
+    if (filter === 'pending' && task.completed) return false;
+    if (filter === 'completed' && !task.completed) return false;
+    
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const titleMatch = task.title.toLowerCase().includes(query);
+      const descriptionMatch = task.description?.toLowerCase().includes(query);
+      return titleMatch || descriptionMatch;
+    }
+    
+    return true;
+  });
+
   if (loading) return <div className="min-h-screen bg-[#050505] flex items-center justify-center"><p className="text-gray-400">Loading tasks...</p></div>;
   if (error) return <div className="min-h-screen bg-[#050505] flex items-center justify-center"><p className="text-red-500">Error: {error}</p></div>;
   if (userId === null) return null; // Should redirect before this
@@ -104,44 +122,88 @@ export default function TasksPage() {
           )}
         </div>
         
-        <button 
-          onClick={() => setShowCreateForm(true)}
-          className="mb-8 px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/20 transition-all active:scale-95"
-        >
-          + Add New Task
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <button 
+            onClick={() => setShowCreateForm(true)}
+            className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/20 transition-all active:scale-95 whitespace-nowrap"
+          >
+            + Add New Task
+          </button>
+          
+          <div className="relative flex-grow group">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500 group-focus-within:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl leading-5 bg-white/5 text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-white/10 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all shadow-sm"
+              placeholder="Search tasks by title or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
 
         {/* Statistics Bar */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {/* Total Tasks */}
-          <div className="bg-zinc-900/50 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between group hover:border-white/20 transition-colors">
+          <div 
+            onClick={() => setFilter('all')}
+            className={`cursor-pointer bg-zinc-900/50 backdrop-blur-md border rounded-xl p-4 flex items-center justify-between group transition-all duration-300 ${
+              filter === 'all' 
+                ? 'border-indigo-500/50 bg-indigo-500/5 shadow-[0_0_20px_rgba(79,70,229,0.1)]' 
+                : 'border-white/10 hover:border-white/20'
+            }`}
+          >
             <div>
               <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Tasks</p>
               <p className="text-2xl font-black text-white mt-1 tracking-tight">{tasks.length}</p>
             </div>
-            <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 group-hover:bg-white/10 transition-colors">
-               <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-colors ${
+              filter === 'all' ? 'bg-indigo-500/20 border-indigo-500/20' : 'bg-white/5 border-white/5 group-hover:bg-white/10'
+            }`}>
+               <svg className={`w-5 h-5 ${filter === 'all' ? 'text-indigo-400' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
             </div>
           </div>
 
           {/* Pending Tasks */}
-          <div className="bg-zinc-900/50 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between group hover:border-amber-500/20 transition-colors">
+          <div 
+            onClick={() => setFilter('pending')}
+            className={`cursor-pointer bg-zinc-900/50 backdrop-blur-md border rounded-xl p-4 flex items-center justify-between group transition-all duration-300 ${
+              filter === 'pending' 
+                ? 'border-amber-500/50 bg-amber-500/5 shadow-[0_0_20px_rgba(245,158,11,0.1)]' 
+                : 'border-white/10 hover:border-amber-500/20'
+            }`}
+          >
             <div>
               <p className="text-xs font-bold text-amber-500/70 uppercase tracking-widest">Pending</p>
               <p className="text-2xl font-black text-amber-400 mt-1 tracking-tight">{tasks.filter(t => !t.completed).length}</p>
             </div>
-            <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/10 group-hover:bg-amber-500/20 transition-colors">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-colors ${
+              filter === 'pending' ? 'bg-amber-500/20 border-amber-500/20' : 'bg-amber-500/10 border-amber-500/10 group-hover:bg-amber-500/20'
+            }`}>
               <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
           </div>
 
           {/* Completed Tasks */}
-          <div className="bg-zinc-900/50 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between group hover:border-emerald-500/20 transition-colors">
+          <div 
+            onClick={() => setFilter('completed')}
+            className={`cursor-pointer bg-zinc-900/50 backdrop-blur-md border rounded-xl p-4 flex items-center justify-between group transition-all duration-300 ${
+              filter === 'completed' 
+                ? 'border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.1)]' 
+                : 'border-white/10 hover:border-emerald-500/20'
+            }`}
+          >
             <div>
               <p className="text-xs font-bold text-emerald-500/70 uppercase tracking-widest">Completed</p>
               <p className="text-2xl font-black text-emerald-400 mt-1 tracking-tight">{tasks.filter(t => t.completed).length}</p>
             </div>
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/10 group-hover:bg-emerald-500/20 transition-colors">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-colors ${
+              filter === 'completed' ? 'bg-emerald-500/20 border-emerald-500/20' : 'bg-emerald-500/10 border-emerald-500/10 group-hover:bg-emerald-500/20'
+            }`}>
               <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
           </div>
@@ -175,9 +237,10 @@ export default function TasksPage() {
         )}
 
         <TaskList 
-          tasks={tasks} 
+          tasks={filteredTasks} 
           onTaskUpdated={handleTaskUpdated} 
-          onTaskDeleted={handleTaskDeleted} 
+          onTaskDeleted={handleTaskDeleted}
+          emptyMessage={tasks.length > 0 && filteredTasks.length === 0 ? "No tasks found matching your search." : undefined}
         />
       </main>
     </div>

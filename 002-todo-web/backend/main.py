@@ -23,7 +23,6 @@ app = FastAPI()
 
 # CORS Middleware
 origins = [
-<<<<<<< HEAD
     "http://localhost:3000",
     "https://todo-web-app-ochre.vercel.app",
 ]
@@ -31,12 +30,6 @@ origins = [
 allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
 if allowed_origins_env:
     origins.extend([origin.strip() for origin in allowed_origins_env.split(",")])
-
-=======
-    "*",
-]
-
->>>>>>> 15ed588639b83ed766b17f548e0317ffeb3850e0
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
