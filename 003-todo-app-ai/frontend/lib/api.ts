@@ -20,7 +20,13 @@ export async function apiFetch<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${NEXT_PUBLIC_BACKEND_URL}${endpoint}`, {
+  let url = NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+  // Remove quotes if present (common Windows env issue)
+  url = url.replace(/^['"]|['"]$/g, '');
+  const baseUrl = url.replace(/\/$/, '');
+  const cleanEndpoint = endpoint.replace(/^\//, '');
+  
+  const response = await fetch(`${baseUrl}/${cleanEndpoint}`, {
     ...options,
     headers,
   });
@@ -32,6 +38,7 @@ export async function apiFetch<T>(
     } catch {
       errorData = { detail: response.statusText };
     }
+    console.error('API Error:', response.status, response.url, errorData);
     throw new Error(errorData.detail || 'API request failed');
   }
 
