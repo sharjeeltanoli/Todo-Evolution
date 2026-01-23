@@ -7,18 +7,51 @@ from models import Message, Conversation
 from mcp_server.tools import add_task, list_tasks, complete_task, delete_task, update_task
 import json
 
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    print("Warning: OPENAI_API_KEY not found in environment variables.")
+
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=api_key or "dummy-key-to-prevent-init-crash"
 )
 
 SYSTEM_PROMPT = """
 You are a helpful task management assistant. 
 You can help users manage their todo list by creating, listing, updating, and deleting tasks.
+
+CRITICAL INSTRUCTIONS:
+1. For ANY query about current tasks (e.g., "what are my tasks?", "do I have pending items?", "what's next?"), you MUST ALWAYS call the `list_tasks` tool to get the ground truth from the database.
+2. NEVER rely on the conversation history to determine the current state of tasks. Tasks mentioned in previous messages may have been completed or deleted since then.
+3. Treat conversation history ONLY as context for user preferences or identifying which specific task the user is referring to (e.g., "delete *that* task"), but always verify existence with tools if unsure.
+4. If the user asks for a summary, first fetch the tasks, then summarize the data returned by the tool.
+
+TASK DISPLAY FORMAT:
+When listing tasks, YOU MUST ALWAYS include the Task ID in parentheses next to the numbering.
+Example: "1. Buy groceries (ID: 27)" instead of just "1. Buy groceries".
+This helps users reference tasks accurately.
+
+HANDLING POSITIONAL REFERENCES (e.g., "delete task 3", "complete the last one"):
+If a user refers to a task by its position in a list (e.g., "3rd task", "task 3", "last task", "the first one") instead of its ID:
+1. FIRST, call `list_tasks` to get the current list of tasks.
+2. Find the task at the requested position (e.g., for "task 3", find the 3rd item in the list).
+3. Extract that task's actual database `id`.
+4. Call the appropriate tool (e.g., `complete_task`, `delete_task`) using that extracted `id`.
+
+Example logic:
+User: "delete task 2"
+Agent: 
+  a. Call `list_tasks()`. 
+  b. Receive list: [{id: 45, title: "A"}, {id: 88, title: "B"}, {id: 90, title: "C"}]
+  c. "task 2" corresponds to the 2nd item: {id: 88, title: "B"}.
+  d. Call `delete_task(task_id=88)`.
+
 Always be polite and concise.
 """
 
 def chat_orchestrator(user_id: int, conversation_id: int, user_message: str):
+    if not api_key:
+        return "System Error: Server configuration is missing API credentials. Please contact the administrator."
     with Session(engine) as session:
         # 1. Save User Message
         db_user_msg = Message(

@@ -7,4 +7,6 @@ python-jose[cryptography]
 python-multipart
 python-dotenv
 openai
+psycopg2-binary
 mcp
+pydantic[email]

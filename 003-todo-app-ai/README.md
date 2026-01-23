@@ -2,18 +2,18 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python](https://img.shields.io/badge/Python-3.13%2B-blue)
-![Next.js](https://img.shields.io/badge/Next.js-15%2B-black)
+![Next.js](https://img.shields.io/badge/Next.js-16%2B-black)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109%2B-009688)
 [![Vercel](https://img.shields.io/badge/Vercel-Live%20Demo-000000?logo=vercel)](https://todo-web-app-ochre.vercel.app/)
 
 <!-- Placeholder for Project Logo -->
 <div align="center">
-  <img src="path/to/logo.png" alt="Project Logo" width="200" height="200">
+  <img src="https://img.icons8.com/fluency/240/todo-list.png" alt="Project Logo" width="160" height="160">
   <br>
   <br>
 </div>
 
-A secure, multi-user task management application built with a modern full-stack architecture, featuring strict user isolation, persistent storage, and a responsive interface.
+A secure, multi-user task management application built with a modern full-stack architecture, featuring strict user isolation, persistent storage, and an intelligent AI assistant.
 
 ## 📋 Table of Contents
 
@@ -23,6 +23,7 @@ A secure, multi-user task management application built with a modern full-stack 
 - [Installation](#-installation)
   - [Backend Setup](#backend-setup)
   - [Frontend Setup](#frontend-setup)
+- [AI Capabilities](#-ai-capabilities)
 - [Usage](#-usage)
 - [Environment Variables](#-environment-variables)
 - [Contributing](#-contributing)
@@ -30,33 +31,37 @@ A secure, multi-user task management application built with a modern full-stack 
 
 ## ✨ Features
 
-- **🔐 Secure Authentication**: Robust user signup, sign-in, and logout functionality powered by Better Auth.
+- **🔐 Secure Authentication**: Robust user signup, sign-in, and logout functionality.
 - **🛡️ Data Isolation**: Strict privacy ensures users only access and manage their own data.
 - **✅ Task Management**: Complete CRUD (Create, Read, Update, Delete) operations for personal tasks.
 - **🤖 AI-Powered Chatbot**: Manage tasks using natural language via an intelligent assistant.
-- **📱 Responsive Design**: A modern, mobile-friendly interface built with Next.js and Tailwind CSS.
+- **📱 Responsive Design**: A modern, mobile-friendly interface built with Next.js 16 and Tailwind CSS 4.
 - **🔌 RESTful API**: A stateless backend API built with FastAPI and SQLModel.
 - **🚀 Live Demo**: [todo-web-app-ochre.vercel.app](https://todo-web-app-ochre.vercel.app/)
-
-<!-- Placeholder for Screenshots -->
-### Screenshots
-
-![Dashboard Screenshot](path/to/screenshot1.png)
-*User Dashboard*
 
 ## 🛠 Tech Stack
 
 **Frontend:**
-- Next.js 15+ (App Router)
-- TypeScript
-- Tailwind CSS
-- Better Auth
+- **Next.js 16** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS 4**
+- **Lucide React** (Icons)
 
 **Backend:**
-- Python 3.13+
-- FastAPI
-- SQLModel
-- Neon Serverless PostgreSQL
+- **Python 3.13+**
+- **FastAPI**
+- **SQLModel**
+- **SQLite** (Local) / **PostgreSQL** (Production)
+- **OpenRouter AI** (LLM Gateway)
+
+## 🤖 AI Capabilities
+
+The integrated AI assistant allows you to manage your tasks naturally:
+- **Natural Language Creation**: "Add a task to buy milk tomorrow morning."
+- **Context-Aware Referencing**: The bot understands which task you mean.
+- **Positional Commands**: "Delete the first task", "Mark the 3rd item as complete", "Update the last one".
+- **Real-time Synchronization**: Changes made via chat reflect instantly on your task list.
 
 ## ⚙️ Prerequisites
 
@@ -80,7 +85,7 @@ Before you begin, ensure you have the following installed:
     uv pip install -r requirements.txt
     ```
 
-3.  Configure environment variables (see [Environment Variables](#-environment-variables)).
+3.  Configure environment variables in `backend/.env` (see [Environment Variables](#-environment-variables)).
 
 4.  Start the backend server:
     ```bash
@@ -100,7 +105,7 @@ Before you begin, ensure you have the following installed:
     npm install
     ```
 
-3.  Configure environment variables (see [Environment Variables](#-environment-variables)).
+3.  Configure environment variables in `frontend/.env.local` (see [Environment Variables](#-environment-variables)).
 
 4.  Start the development server:
     ```bash
@@ -108,63 +113,31 @@ Before you begin, ensure you have the following installed:
     ```
     The application will be accessible at `http://localhost:3000`.
 
-## ☁️ Vercel Deployment & Auth Setup
-
-To deploy this project on Vercel and ensure authentication works with Neon DB, follow these steps:
-
-1.  **Database (Neon)**:
-    -   Create a project on [Neon](https://neon.tech).
-    -   Get the connection string from the Dashboard. It should look like `postgresql://user:password@ep-xyz.region.aws.neon.tech/neondb?sslmode=require`.
-
-2.  **Environment Variables (Vercel)**:
-    -   Go to your Vercel Project Settings > Environment Variables.
-    -   Add the following secrets:
-
-    | Variable | Description | Example Value |
-    |:---|:---|:---|
-    | `DATABASE_URL` | Neon DB Connection String | `postgresql://user:password@host/db?sslmode=require` |
-    | `BETTER_AUTH_SECRET` | Secret key for JWT signing | `openssl rand -hex 32` |
-    | `ALLOWED_ORIGINS` | Comma-separated allowed origins | `https://your-app.vercel.app` |
-    | `NEXT_PUBLIC_BACKEND_URL` | URL of your backend API | `https://your-backend.vercel.app` |
-
-3.  **Deploy**:
-    -   Push your code to GitHub.
-    -   Import the project into Vercel.
-    -   Vercel will automatically detect the Next.js frontend.
-    -   Ensure your backend (FastAPI) is also deployed (e.g., as Vercel Serverless Functions in `api/` or on a separate service like Render/Railway) and reachable via `NEXT_PUBLIC_BACKEND_URL`.
 ## 🎮 Usage
 
 1.  Ensure both the backend (`http://localhost:8000`) and frontend (`http://localhost:3000`) servers are running.
 2.  Open your browser and visit `http://localhost:3000`.
 3.  Sign up for a new account or log in if you already have one.
-4.  Start creating and managing your tasks!
+4.  Start creating and managing your tasks manually or via the Chatbot!
 
 ## 🔑 Environment Variables
 
-Create `.env` files in the respective directories with the following keys:
-
 **Backend (`backend/.env`)**
 ```ini
-# Database Connection (Neon) - Must include sslmode=require
-DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
+# Database Connection (SQLite example)
+DATABASE_URL=sqlite:///./todo.db
 
-# Security - 32+ character random string
-BETTER_AUTH_SECRET=your_super_secret_key
+# OpenRouter / OpenAI Config
+OPENAI_API_KEY=your_api_key_here
 
-# CORS - Comma-separated list of allowed origins
-ALLOWED_ORIGINS=http://localhost:3000,https://todo-web-app-ochre.vercel.app
-
-# AI Assistant
-OPENAI_API_KEY=sk-your-openai-api-key
+# Security
+SECRET_KEY=your_jwt_secret_key
 ```
 
 **Frontend (`frontend/.env.local`)**
 ```ini
 # Backend API URL
 NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# AI Assistant
-NEXT_PUBLIC_OPENAI_DOMAIN_KEY=your-domain-key
 ```
 
 ## 🤝 Contributing
