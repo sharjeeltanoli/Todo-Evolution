@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/Python-3.13%2B-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-16%2B-black)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109%2B-009688)
-[![Vercel](https://img.shields.io/badge/Vercel-Live%20Demo-000000?logo=vercel)](https://todo-web-app-ochre.vercel.app/)
+[![Vercel](https://img.shields.io/badge/Vercel-Live%20Demo-000000?logo=vercel)](https://todo-evolution-sigma.vercel.app/)
 
 <!-- Placeholder for Project Logo -->
 <div align="center">
@@ -37,7 +37,7 @@ A secure, multi-user task management application built with a modern full-stack 
 - **🤖 AI-Powered Chatbot**: Manage tasks using natural language via an intelligent assistant.
 - **📱 Responsive Design**: A modern, mobile-friendly interface built with Next.js 16 and Tailwind CSS 4.
 - **🔌 RESTful API**: A stateless backend API built with FastAPI and SQLModel.
-- **🚀 Live Demo**: [todo-web-app-ochre.vercel.app](https://todo-web-app-ochre.vercel.app/)
+- **🚀 Live Demo**: [todo-evolution-sigma.vercel.app](https://todo-evolution-sigma.vercel.app/)
 
 ## 🛠 Tech Stack
 
