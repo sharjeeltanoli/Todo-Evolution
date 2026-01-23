@@ -7,9 +7,13 @@ from models import Message, Conversation
 from mcp_server.tools import add_task, list_tasks, complete_task, delete_task, update_task
 import json
 
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    print("Warning: OPENAI_API_KEY not found in environment variables.")
+
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=api_key or "dummy-key-to-prevent-init-crash"
 )
 
 SYSTEM_PROMPT = """
@@ -19,6 +23,8 @@ Always be polite and concise.
 """
 
 def chat_orchestrator(user_id: int, conversation_id: int, user_message: str):
+    if not api_key:
+        return "System Error: Server configuration is missing API credentials. Please contact the administrator."
     with Session(engine) as session:
         # 1. Save User Message
         db_user_msg = Message(

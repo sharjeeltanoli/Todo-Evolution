@@ -23,7 +23,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://todo-evolution-sigma.vercel.app",
+        "https://sharjeeel4-todo-ai-web.hf.space"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
