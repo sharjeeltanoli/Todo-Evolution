@@ -1,0 +1,12 @@
+# Patterns to ignore when packaging Helm charts.
+.git/
+.gitignore
+.DS_Store
+.helmignore
+*.log
+.idea/
+.vscode/
+node_modules/
+__pycache__/
+venv/
+.env

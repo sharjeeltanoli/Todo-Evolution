@@ -32,5 +32,14 @@ This repository documents the evolution of a task management application, progre
     *   **Real-time Sync:** Chat actions are instantly reflected in the task list.
     *   **Modern Tech:** Built on the latest Next.js 16 and Tailwind CSS 4 standards.
 
+### 4. 004-todo-ai-docker
+**Description:** A production-ready, containerized version of the AI-enhanced task manager, designed for scalable deployment.
+*   **Tech Stack:** Docker, Kubernetes (Minikube), Helm, Next.js 16, FastAPI, MCP.
+*   **Key Features:**
+    *   **Containerization:** Fully Dockerized frontend and backend with optimized multi-stage builds.
+    *   **Orchestration:** Kubernetes support with custom Helm charts for easy deployment.
+    *   **AI & MCP:** Deep integration with Model Context Protocol for secure AI database interactions.
+    *   **Production Architecture:** Designed for scalability, ease of deployment, and modern DevOps workflows.
+
 ---
 **Note:** Please refer to the `README.md` file within each specific project directory for detailed installation instructions, configuration guides, and usage examples.

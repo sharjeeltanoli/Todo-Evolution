@@ -1,0 +1,50 @@
+openapi: 3.0.0
+info:
+  title: AI Task Chatbot API
+  version: 1.0.0
+paths:
+  /api/{user_id}/chat:
+    post:
+      summary: Send a message to the AI assistant
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: The ID of the authenticated user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+              properties:
+                conversation_id:
+                  type: integer
+                  description: Optional ID of existing conversation. If omitted, a new one is created.
+                message:
+                  type: string
+                  description: The user's natural language message.
+      responses:
+        '200':
+          description: Successful response from AI
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversation_id:
+                    type: integer
+                  response:
+                    type: string
+                  tool_calls:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          description: Unauthorized (Invalid JWT)
+        '403':
+          description: Forbidden (User ID mismatch)
