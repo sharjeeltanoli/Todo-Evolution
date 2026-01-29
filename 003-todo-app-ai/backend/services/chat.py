@@ -156,7 +156,7 @@ def chat_orchestrator(user_id: int, conversation_id: int, user_message: str):
                 model="openai/gpt-4o-mini",
                 messages=openai_messages,
                 tools=tools,
-                tool_choice="auto",
+                tool_choice="required",
             )
         except Exception as e:
             print(f"OpenAI Error: {e}")
