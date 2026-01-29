@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: todo-backend:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - backend/.env
+    environment:
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-local_dev_secret_12345678901234567890123456789012}
+      - DATABASE_URL=${DATABASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: always
+
+  frontend:
+    image: todo-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: always

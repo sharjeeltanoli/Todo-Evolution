@@ -1,0 +1,29 @@
+# Node.js / TypeScript
+node_modules/
+dist/
+build/
+*.log
+.env*
+
+**/.next/
+.next/
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+
+*.out
+*.err
