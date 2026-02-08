@@ -52,6 +52,9 @@ jobs:
 
       - name: Save DigitalOcean kubeconfig
         run: doctl kubernetes cluster kubeconfig save ${{ secrets.DO_CLUSTER_NAME }}
+        
+      - name: Configure Kubernetes Secret for DigitalOcean Registry
+        run: doctl registry kubernetes-manifest | kubectl apply -f -
 
       - name: Install Dapr CLI
         uses: dapr/setup-dapr@v1
