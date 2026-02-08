@@ -98,7 +98,7 @@ export default function TaskForm({ initialTask, onSubmit, onCancel, isSubmitting
           <select
             id="priority"
             value={priority}
-            onChange={(e) => setPriority(e.target.value)}
+            onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}
             className="w-full bg-white/5 border border-white/10 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white sm:text-sm p-3 outline-none transition-all"
             disabled={isSubmitting}
           >
