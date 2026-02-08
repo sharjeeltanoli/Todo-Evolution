@@ -1,0 +1,32 @@
+name: Deploy to DigitalOcean Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-app:latest -f 004-todo-ai-docker/Dockerfile .
+          docker push registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-app:latest
+
+      - name: Save DigitalOcean Kubeconfig
+        run: doctl kubernetes cluster kubeconfig save ${{ secrets.DO_CLUSTER_NAME }}
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f 004-todo-ai-docker/kubernetes/

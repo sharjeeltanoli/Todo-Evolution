@@ -1,0 +1,36 @@
+# Event Contract: Cloud Pub/Sub
+
+apiVersion: 1.0.0
+type: pubsub.kafka
+
+events:
+  task.completed:
+    description: "Triggered when a user completes a task."
+    schema:
+      type: object
+      properties:
+        event_id: { type: string, format: uuid }
+        event_type: { type: string, enum: [task.completed] }
+        user_id: { type: integer }
+        timestamp: { type: string, format: date-time }
+        payload:
+          type: object
+          properties:
+            task_id: { type: integer }
+            title: { type: string }
+            recurrence_rule: { type: string, nullable: true }
+
+  reminder.triggered:
+    description: "Triggered by Dapr Jobs at a scheduled time."
+    schema:
+      type: object
+      properties:
+        event_id: { type: string, format: uuid }
+        event_type: { type: string, enum: [reminder.triggered] }
+        user_id: { type: integer }
+        timestamp: { type: string, format: date-time }
+        payload:
+          type: object
+          properties:
+            task_id: { type: integer }
+            message: { type: string }

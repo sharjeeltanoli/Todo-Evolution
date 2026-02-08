@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+dapr
+dapr-ext-grpc
+pydantic
+python-dateutil
+requests

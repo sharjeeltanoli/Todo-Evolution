@@ -1,0 +1,19 @@
+openapi: 3.0.0
+info:
+  title: Notification Service API
+  version: 1.0.0
+paths:
+  /reminders:
+    post:
+      summary: Handle incoming reminder events from Dapr
+      responses:
+        '200':
+          description: Successfully processed
+        '500':
+          description: Processing failed
+  /health:
+    get:
+      summary: Liveness/Readiness probe
+      responses:
+        '200':
+          description: Healthy

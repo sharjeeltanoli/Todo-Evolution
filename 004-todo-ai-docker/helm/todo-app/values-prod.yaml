@@ -1,0 +1,19 @@
+global:
+  environment: prod
+
+frontend:
+  replicaCount: 3
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+backend:
+  replicaCount: 3
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+mcpServer:
+  replicaCount: 2

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskEvent",
+  "type": "object",
+  "properties": {
+    "event_id": { "type": "string", "format": "uuid" },
+    "event_type": { "enum": ["task.created", "task.updated", "task.deleted", "task.completed"] },
+    "user_id": { "type": "string" },
+    "task_id": { "type": "integer" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "payload": { "type": "object" }
+  },
+  "required": ["event_id", "event_type", "user_id", "task_id", "timestamp", "payload"]
+}

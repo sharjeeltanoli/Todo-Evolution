@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+sqlalchemy
+sqlmodel
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+python-dotenv
+openai
+psycopg2-binary
+mcp
+pydantic[email]
+python-dateutil
+dapr
+dapr-ext-grpc
+dapr-ext-fastapi
+aiokafka

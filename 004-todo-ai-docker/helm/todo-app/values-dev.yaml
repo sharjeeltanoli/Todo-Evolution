@@ -1,0 +1,11 @@
+global:
+  environment: dev
+
+frontend:
+  replicaCount: 1
+
+backend:
+  replicaCount: 1
+
+mcpServer:
+  replicaCount: 1

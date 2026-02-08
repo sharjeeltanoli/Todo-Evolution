@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recurring-task-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recurring-task-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: recurring-task-service
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "recurring-task-service"
+        dapr.io/app-port: "8002"
+    spec:
+      containers:
+      - name: recurring-task-service
+        image: PLACEHOLDER_IMAGE_RECURRING
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8002
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8002
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8002
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recurring-task-service
+spec:
+  selector:
+    app: recurring-task-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8002
