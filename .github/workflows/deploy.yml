@@ -22,7 +22,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-app:latest -f 004-todo-ai-docker/Dockerfile .
+          docker build -t registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-app:latest -f 004-todo-ai-docker/backend/Dockerfile 004-todo-ai-docker/backend/
           docker push registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-app:latest
 
       - name: Save DigitalOcean Kubeconfig
