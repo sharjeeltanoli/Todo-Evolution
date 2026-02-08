@@ -53,18 +53,30 @@ jobs:
       - name: Save DigitalOcean kubeconfig
         run: doctl kubernetes cluster kubeconfig save ${{ secrets.DO_CLUSTER_NAME }}
 
+      - name: Install Dapr CLI
+        uses: dapr/setup-dapr@v1
+
+      - name: Initialize Dapr on Kubernetes
+        run: |
+          if ! dapr status -k > /dev/null 2>&1; then
+            echo \"Dapr not found on cluster. Initializing...\"
+            dapr init -k --wait
+          else
+            echo \"Dapr is already installed on the cluster.\"
+          fi
+
       - name: Deploy to Kubernetes
         run: |
           # Apply Secrets first
           kubectl apply -f k8s/cloud/kafka-secrets.yaml
           kubectl apply -f k8s/cloud/todo-secrets.yaml
-          
+
           # Apply Dapr components
           kubectl apply -f dapr-components/cloud/
-          
+
           # Apply Application manifests (to be created in Phase 4)
           kubectl apply -f k8s/cloud/
-          
+
           # Update images with specific SHA to ensure redeployment
           kubectl set image deployment/todo-backend backend=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-backend:${{ github.sha }}
           kubectl set image deployment/todo-frontend frontend=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-frontend:${{ github.sha }}
