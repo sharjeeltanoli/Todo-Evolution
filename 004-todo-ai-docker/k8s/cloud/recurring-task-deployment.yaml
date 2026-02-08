@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: recurring-task-service
-        image: PLACEHOLDER_IMAGE_RECURRING
+        image: registry.digitalocean.com/todo-registry/recurring-task-service:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8002

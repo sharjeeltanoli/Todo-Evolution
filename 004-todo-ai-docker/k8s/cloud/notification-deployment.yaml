@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: notification-service
-        image: PLACEHOLDER_IMAGE_NOTIFICATION
+        image: registry.digitalocean.com/todo-registry/notification-service:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8001

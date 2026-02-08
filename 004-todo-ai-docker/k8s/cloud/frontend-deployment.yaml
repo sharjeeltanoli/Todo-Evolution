@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: todo-frontend
-        image: PLACEHOLDER_IMAGE_FRONTEND
+        image: registry.digitalocean.com/todo-registry/todo-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
