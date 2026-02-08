@@ -78,8 +78,8 @@ jobs:
           kubectl apply -f k8s/cloud/
 
           # Update images with specific SHA to ensure redeployment
-          kubectl set image deployment/todo-backend backend=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-backend:${{ github.sha }}
-          kubectl set image deployment/todo-frontend frontend=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-frontend:${{ github.sha }}
+          kubectl set image deployment/todo-backend todo-backend=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-backend:${{ github.sha }}
+          kubectl set image deployment/todo-frontend todo-frontend=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/todo-frontend:${{ github.sha }}
           kubectl set image deployment/notification-service notification-service=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/notification-service:${{ github.sha }}
           kubectl set image deployment/recurring-task-service recurring-task-service=registry.digitalocean.com/${{ secrets.DO_REGISTRY_NAME }}/recurring-task-service:${{ github.sha }}
 
@@ -89,3 +89,4 @@ jobs:
           kubectl rollout status deployment/todo-frontend
           kubectl rollout status deployment/notification-service
           kubectl rollout status deployment/recurring-task-service
+
