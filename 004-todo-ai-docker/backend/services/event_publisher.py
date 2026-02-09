@@ -1,12 +1,20 @@
 import json
+import os
 from datetime import datetime
 from typing import Any, Dict, Optional
-try:
-    from dapr.clients import DaprClient
-    DAPR_AVAILABLE = True
-except ImportError:
+
+DAPR_ENABLED = os.getenv("DAPR_ENABLED", "true").lower() == "true"
+
+if DAPR_ENABLED:
+    try:
+        from dapr.clients import DaprClient
+        DAPR_AVAILABLE = True
+    except ImportError:
+        DAPR_AVAILABLE = False
+        print("Dapr Python SDK not installed. Event publishing will be disabled.")
+else:
     DAPR_AVAILABLE = False
-    print("Dapr Python SDK not installed. Event publishing will be disabled.")
+    print("Dapr is disabled via DAPR_ENABLED env var. Event publishing will be skipped.")
 
 class EventPublisher:
     def __init__(self, pubsub_name: str = "pubsub"):

@@ -38,6 +38,8 @@ spec:
         env:
         - name: PYTHONUNBUFFERED
           value: "1"
+        - name: DAPR_ENABLED
+          value: "false"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
