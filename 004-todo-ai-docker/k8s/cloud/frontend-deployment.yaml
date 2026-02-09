@@ -46,11 +46,6 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
-        env:
-        - name: NEXT_PUBLIC_API_URL
-          value: "http://todo-backend"
-        - name: NEXT_PUBLIC_BACKEND_URL
-          value: "http://todo-backend"
         livenessProbe:
           httpGet:
             path: /
