@@ -1,0 +1,20 @@
+apiVersion: dapr.io/v1alpha1 
+kind: Component 
+metadata: 
+  name: pubsub 
+spec: 
+  type: pubsub.kafka 
+  version: v1 
+  metadata: 
+  - name: brokers 
+    value: "redpanda.redpanda.svc.cluster.local:9093" 
+  - name: authType 
+    value: "password" 
+  - name: saslUsername 
+    secretKeyRef: 
+      name: kafka-secrets 
+      key: saslUsername 
+  - name: saslPassword 
+    secretKeyRef: 
+      name: kafka-secrets 
+      key: saslPassword 

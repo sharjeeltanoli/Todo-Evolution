@@ -9,7 +9,10 @@ spec:
     matchLabels:
       app: recurring-task-service
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
