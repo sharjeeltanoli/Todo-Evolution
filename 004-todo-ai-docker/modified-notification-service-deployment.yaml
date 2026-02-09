@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "3"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"notification-service","namespace":"default"},"spec":{"replicas":1,
+"selector":{"matchLabels":{"app":"notification-service"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template
+":{"metadata":{"annotations":{"dapr.io/app-id":"notification-service","dapr.io/app-port":"8001","dapr.io/enabled":"true"},"labels":{"app":"notification-s
+ervice"}},"spec":{"containers":[{"env":[{"name":"PYTHONUNBUFFERED","value":"1"}],"image":"registry.digitalocean.com/todo-registry/notification-service:la
+test","imagePullPolicy":"Always","livenessProbe":{"httpGet":{"path":"/health","port":8001},"initialDelaySeconds":15,"periodSeconds":20},"name":"notificat
+ion-service","ports":[{"containerPort":8001}],"readinessProbe":{"httpGet":{"path":"/health","port":8001},"initialDelaySeconds":5,"periodSeconds":10},"res
+ources":{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"50m","memory":"64Mi"}}}]}}}}
+  creationTimestamp: "2026-02-08T17:02:32Z"
+  generation: 3
+  name: notification-service
+  namespace: default
+  resourceVersion: "77015"
+  uid: 42a449be-971d-44e0-b85e-80ec44829113
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: notification-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        dapr.io/app-id: notification-service
+        dapr.io/app-port: "8001"
+        dapr.io/enabled: "true"
+      labels:
+        app: notification-service
+    spec:
+      imagePullSecrets:
+      - name: todo-app-registry-123
+      containers:
+      - env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        image: registry.digitalocean.com/todo-registry/notification-service:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8001
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: notification-service
+        ports:
+        - containerPort: 8001
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8001
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
