@@ -18,11 +18,7 @@ spec:
       labels:
         app: recurring-task-service
       annotations:
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "recurring-task-service"
-        dapr.io/app-port: "8002"
-        dapr.io/sidecar-liveness-probe-initial-delay-seconds: "60"
-        dapr.io/sidecar-readiness-probe-initial-delay-seconds: "60"
+        dapr.io/enabled: "false"
     spec:
       imagePullSecrets:
       - name: todo-app-registry-123
