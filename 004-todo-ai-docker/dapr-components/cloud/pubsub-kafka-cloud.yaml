@@ -7,7 +7,7 @@ spec:
   version: v1
   metadata:
   - name: brokers
-    value: "PLACEHOLDER_REDPANDA_BOOTSTRAP_URL:9092"
+    value: "d647u43t489913vp2r0g.any.us-east-1.mpx.prd.cloud.redpanda.com:9092"
   - name: authType
     value: "password"
   - name: saslMechanism
@@ -15,7 +15,7 @@ spec:
   - name: saslUsername
     secretKeyRef:
       name: kafka-secrets
-      key: username
+      key: user
   - name: saslPassword
     secretKeyRef:
       name: kafka-secrets

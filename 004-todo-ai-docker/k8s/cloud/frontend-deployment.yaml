@@ -1,26 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: todo-frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-frontend
   namespace: default
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: todo-frontend
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+    type: Recreate
   template:
     metadata:
       labels:
         app: todo-frontend
     spec:
+      imagePullSecrets:
+      - name: todo-app-registry-123
       containers:
       - name: todo-frontend
-        image: registry.digitalocean.com/todo-registry/todo-frontend:latest
+        image: registry.digitalocean.com/todo-app-registry-123/todo-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -40,24 +52,11 @@ spec:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 20
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 10
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: todo-frontend
-spec:
-  type: LoadBalancer
-  selector:
-    app: todo-frontend
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000

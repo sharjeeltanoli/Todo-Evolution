@@ -10,9 +10,6 @@ spec:
       app: todo-backend
   strategy:
     type: Recreate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   template:
     metadata:
       labels:
@@ -21,10 +18,14 @@ spec:
         dapr.io/enabled: "true"
         dapr.io/app-id: "todo-backend"
         dapr.io/app-port: "8000"
+        dapr.io/sidecar-liveness-probe-initial-delay-seconds: "60"
+        dapr.io/sidecar-readiness-probe-initial-delay-seconds: "60"
     spec:
+      imagePullSecrets:
+      - name: todo-app-registry-123
       containers:
       - name: todo-backend
-        image: registry.digitalocean.com/todo-registry/todo-backend:latest
+        image: registry.digitalocean.com/todo-app-registry-123/todo-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -57,13 +58,13 @@ spec:
           httpGet:
             path: /health
             port: 8000
-          initialDelaySeconds: 15
+          initialDelaySeconds: 60
           periodSeconds: 20
         readinessProbe:
           httpGet:
             path: /health
             port: 8000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 60
           periodSeconds: 10
 ---
 apiVersion: v1
