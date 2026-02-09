@@ -15,7 +15,7 @@
 - **Choice**: SASL/SCRAM authentication via Dapr PubSub Component.
 - **Rationale**: 
     - Security: Redpanda Cloud Serverless requires TLS + SASL/SCRAM.
-    - Implementation: Dapr's `pubsub.kafka` component natively supports `authType: sasl_scram_sha256`.
+    - Implementation: Dapr's `pubsub.kafka` component supports SASL via `authType: password` and `saslMechanism: SCRAM-SHA-256`.
     - Secrets: Bootstrap URL, Username, and Password will be stored in K8s Secrets and referenced in the Dapr YAML.
 - **Alternatives Considered**: 
     - Plain Kafka client: Too much boilerplate; Dapr sidecar abstracts this perfectly.

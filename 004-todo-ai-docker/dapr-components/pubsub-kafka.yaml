@@ -10,8 +10,8 @@ spec:
     # For Minikube: use the Minikube IP (e.g., 192.168.49.2:9092)
     # For K8s Cluster: use the service DNS (e.g., redpanda.redpanda.svc.cluster.local:9093)
     value: "192.168.49.2:9092"
-  - name: authRequired
-    value: "false"
+  - name: authType
+    value: "none"
   - name: consumerID
     value: "todo-app-group"
   - name: disableTls

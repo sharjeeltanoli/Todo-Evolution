@@ -9,7 +9,9 @@ spec:
   - name: brokers
     value: "PLACEHOLDER_REDPANDA_BOOTSTRAP_URL:9092"
   - name: authType
-    value: "sasl_scram_sha256"
+    value: "password"
+  - name: saslMechanism
+    value: "SCRAM-SHA-256"
   - name: saslUsername
     secretKeyRef:
       name: kafka-secrets
