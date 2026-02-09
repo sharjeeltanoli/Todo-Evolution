@@ -6,15 +6,35 @@ from db import engine
 from models import Message, Conversation
 from mcp_server.tools import add_task, list_tasks, complete_task, delete_task, update_task
 import json
+from dotenv import load_dotenv
+from pathlib import Path
 
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    print("Warning: OPENAI_API_KEY not found in environment variables.")
+# Ensure env is loaded from multiple possible locations
+for p in [Path(__file__).resolve().parent, Path(__file__).resolve().parent.parent, Path.cwd()]:
+    env_file = p / '.env'
+    if env_file.exists():
+        load_dotenv(dotenv_path=env_file)
 
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=api_key or "dummy-key-to-prevent-init-crash"
-)
+def get_api_key():
+    key = os.getenv("OPENAI_API_KEY")
+    if key:
+        # Clean up potential quotes from Windows env or .env files
+        key = key.strip().strip("'").strip('"')
+        print(f"DEBUG: Chat service using API key starting with: {key[:10]}...")
+    else:
+        print("DEBUG: OPENAI_API_KEY not found in environment variables.")
+    return key
+
+def get_openai_client():
+    api_key = get_api_key()
+    base_url = os.getenv("OPENAI_BASE_URL", "https://openrouter.ai/api/v1")
+    return OpenAI(
+        base_url=base_url,
+        api_key=api_key or "dummy-key-to-prevent-init-crash"
+    )
+
+def get_model_name():
+    return os.getenv("CHAT_MODEL", "openai/gpt-4o-mini")
 
 SYSTEM_PROMPT = """
 You are a helpful task management assistant. 
@@ -50,8 +70,11 @@ Always be polite and concise.
 """
 
 def chat_orchestrator(user_id: int, conversation_id: int, user_message: str):
+    api_key = get_api_key()
     if not api_key:
         return "System Error: Server configuration is missing API credentials. Please contact the administrator."
+    
+    client = get_openai_client()
     with Session(engine) as session:
         # 1. Save User Message
         db_user_msg = Message(
@@ -153,7 +176,7 @@ def chat_orchestrator(user_id: int, conversation_id: int, user_message: str):
         # 4. First OpenAI Call
         try:
             response = client.chat.completions.create(
-                model="openai/gpt-4o-mini",
+                model=get_model_name(),
                 messages=openai_messages,
                 tools=tools,
                 tool_choice="required",
@@ -201,7 +224,7 @@ def chat_orchestrator(user_id: int, conversation_id: int, user_message: str):
             
             # Second call to get the final response
             second_response = client.chat.completions.create(
-                model="openai/gpt-4o-mini",
+                model=get_model_name(),
                 messages=openai_messages,
             )
             final_content = second_response.choices[0].message.content
