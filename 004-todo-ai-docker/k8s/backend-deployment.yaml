@@ -36,6 +36,13 @@ spec:
             secretKeyRef:
               name: todo-secrets
               key: BETTER_AUTH_SECRET
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: todo-secrets
+              key: OPENAI_API_KEY
+        - name: OPENAI_BASE_URL
+          value: "https://openrouter.ai/api/v1"
 ---
 apiVersion: v1
 kind: Service
